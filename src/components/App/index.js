@@ -14,8 +14,8 @@ import * as ROUTES from "../../constants/routes";
 import { withAuthentication } from '../Session';
 
 
-const App = () => (
 
+const App = () => (
       <Router>
         <div>
           <Navigation />
