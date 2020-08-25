@@ -4,7 +4,7 @@ import SignOutButton from "../SignOut";
 
 import * as ROUTES from "../../constants/routes";
 import { AuthUserContext } from "../Session";
-
+import NavStyles from './navigation.module.scss'
 const Navigation = () => (
   <div>
     <AuthUserContext>
@@ -14,9 +14,9 @@ const Navigation = () => (
 );
 
 const NavigationAuth = () => (
-  <ul>
+  <div className={NavStyles.container}>
     <li>
-      <Link to={ROUTES.LANDING}>Landing</Link>
+      <Link to={ROUTES.LANDING}>Put Icon</Link>
     </li>
     <li>
       <Link to={ROUTES.HOME}>Home</Link>
@@ -30,18 +30,18 @@ const NavigationAuth = () => (
     <li>
       <SignOutButton />
     </li>
-  </ul>
+  </div>
 );
 
 const NavigationNonAuth = () => (
-  <ul>
+  <div className={NavStyles.container}>
     <li>
-      <Link to={ROUTES.LANDING}>Landing</Link>
+      <Link to={ROUTES.LANDING}>Home</Link>
     </li>
     <li>
       <Link to={ROUTES.SIGN_IN}>Sign In</Link>
     </li>
-  </ul>
+  </div>
 );
 
 export default Navigation;

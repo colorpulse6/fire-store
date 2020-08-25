@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
  
 import { withFirebase } from '../Firebase';
- 
+import Input from '../input'
+
 const INITIAL_STATE = {
   displayName: '',
   error: null,

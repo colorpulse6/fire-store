@@ -1,8 +1,9 @@
 import React from 'react';
- 
+import SearchBooks from "../GoogleBooks"
+
 const LandingPage = () => (
   <div>
-    <h1>Landing</h1>
+    <SearchBooks />
   </div>
 );
  
