@@ -13,7 +13,7 @@ class BookDetails extends React.Component {
   componentDidMount() {
     let id = this.props.match.params.bookId;
     fetch(
-      `https://www.googleapis.com/books/v1/volumes/${id}?key=AIzaSyC0ES72Pwuan69r5kc4LdCVHTOIcsmljkI`
+      `https://www.googleapis.com/books/v1/volumes/${id}?key=${process.env.REACT_APP_GOOGLE_BOOKS_API_KEY}`
     )
       .then((book) => book.json())
       .catch((err) => {
