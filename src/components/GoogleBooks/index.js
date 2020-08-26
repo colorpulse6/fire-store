@@ -1,14 +1,15 @@
 import React from "react";
 import BookStyles from './books.module.scss'
 import Input from '../input'
+import { Link, withRouter } from 'react-router-dom';
+import * as ROUTES from '../../constants/routes';
+
 class SearchBooks extends React.Component {
   state = {
     filteredBooks: [],
     isLoading: true,
     input: "",
   };
-
-
 
   handleFilter = (e) => {
     e.preventDefault();
@@ -40,6 +41,7 @@ class SearchBooks extends React.Component {
         {this.state.filteredBooks ? (
           this.state.filteredBooks.map((book, index) => {
             return (
+              <Link to={`${ROUTES.BOOK_DETAILS}/${book.id}`}>
               <img
                 alt={book.volumeInfo.title}
                 className={BookStyles.books}
@@ -49,6 +51,7 @@ class SearchBooks extends React.Component {
                   book.volumeInfo.imageLinks.smallThumbnail
                 }
               ></img>
+              </Link>
             );
           })
         ) : (
