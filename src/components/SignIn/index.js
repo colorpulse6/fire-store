@@ -6,9 +6,10 @@ import { SignUpLink } from '../SignUp';
 import { PasswordForgetLink } from '../PasswordForget';
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
- 
+import FormStyles from '../form.module.scss'
+
 const SignInPage = () => (
-  <div>
+  <div className={FormStyles.header}>
     <h1>SignIn</h1>
     <SignInForm />
     <PasswordForgetLink />
@@ -55,7 +56,7 @@ class SignInFormBase extends Component {
     const isInvalid = password === '' || email === '';
  
     return (
-      <form onSubmit={this.onSubmit}>
+      <form onSubmit={this.onSubmit} className={FormStyles.container}>
         <input
           name="email"
           value={email}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
  
 import { withFirebase } from '../Firebase';
-import Input from '../input'
+import FormStyles from '../form.module.scss'
 
 const INITIAL_STATE = {
   displayName: '',
@@ -41,7 +41,7 @@ class InfoChangeForm extends Component {
      displayName === '';
  
     return (
-      <form onSubmit={this.onSubmit}>
+      <form onSubmit={this.onSubmit} className={FormStyles.container}>
         <input
           name="displayName"
           value={displayName}

@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
  
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
-import Input from '../input'
+import FormStyles from '../form.module.scss'
 
 const PasswordForgetPage = () => (
-  <div>
+  <div className={FormStyles.header}>
     <h1>PasswordForget</h1>
     <PasswordForgetForm />
   </div>
@@ -48,7 +48,7 @@ class PasswordForgetFormBase extends Component {
     const isInvalid = email === '';
  
     return (
-      <form onSubmit={this.onSubmit}>
+      <form onSubmit={this.onSubmit} className={FormStyles.container}>
         <input
           name="email"
           value={this.state.email}

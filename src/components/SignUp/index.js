@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
-
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
- 
+import FormStyles from '../form.module.scss'
+
 const SignUpPage = () => (
-  <div>
+  <div className={FormStyles.header}>
     <h1>SignUp</h1>
     <SignUpForm />
     
@@ -74,7 +74,7 @@ class SignUpFormBase extends Component {
       username === '';
 
     return (
-      <form onSubmit={this.onSubmit}>
+      <form onSubmit={this.onSubmit} className={FormStyles.container}>
       <input
           name="username"
           value={username}

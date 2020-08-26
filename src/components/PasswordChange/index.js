@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
  
 import { withFirebase } from '../Firebase';
- 
+import FormStyles from '../form.module.scss'
+
 const INITIAL_STATE = {
   passwordOne: '',
   passwordTwo: '',
@@ -41,7 +42,7 @@ class PasswordChangeForm extends Component {
       passwordOne !== passwordTwo || passwordOne === '';
  
     return (
-      <form onSubmit={this.onSubmit}>
+      <form onSubmit={this.onSubmit} className={FormStyles.container}>
         <input
           name="passwordOne"
           value={passwordOne}
