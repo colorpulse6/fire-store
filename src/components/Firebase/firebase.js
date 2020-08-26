@@ -39,8 +39,11 @@ class Firebase {
 
   doUpdateProfile = (displayName) => this.auth.currentUser.updateProfile(displayName)
 
+  // doAddBookToUser = (bookName) => this.user.update(bookName)
+
   // *** User API ***
  
+
   user = uid => this.db.ref(`users/${uid}`);
  
   users = () => this.db.ref('users');
