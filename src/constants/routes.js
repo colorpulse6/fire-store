@@ -6,3 +6,4 @@ export const ACCOUNT = '/account';
 // export const ADMIN = '/admin';
 export const PASSWORD_FORGET = '/pw-forget';
 export const BOOK_DETAILS = '/book-details';
+export const YOUR_SHELF = '/your-shelf';

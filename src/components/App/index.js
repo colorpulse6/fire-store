@@ -9,6 +9,7 @@ import HomePage from "../Home";
 import AccountPage from "../Account";
 // import AdminPage from "../Admin";
 import BookDetailsPage from "../GoogleBooks/bookDetails"
+import YourShelfPage from "../YourShelf"
 
 import * as ROUTES from "../../constants/routes";
 
@@ -30,6 +31,7 @@ const App = () => (
           <Route path={ROUTES.ACCOUNT} component={AccountPage} />
           {/* <Route path={ROUTES.ADMIN} component={AdminPage} /> */}
           <Route path={`${ROUTES.BOOK_DETAILS}/:bookId`} component={BookDetailsPage}/>
+          <Route path={`${ROUTES.YOUR_SHELF}`} component={YourShelfPage}/>
         </div>
       </Router>
     );
