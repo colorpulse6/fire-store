@@ -1,21 +1,23 @@
 import React from "react";
 import { withAuthorization } from "../Session";
 import { AuthUserContext } from "../Session";
-import BookStyles from "./books.module.scss";
-import Input from "../input";
-import { Link, withRouter } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
-import app from "firebase/app";
+
 
 class BookDetails extends React.Component {
+    
   state = {
     bookInfo: {},
     loading: true,
+    isAlreadyRead:false
   };
 
   componentDidMount() {
-    
-    
+    this.fetchBookDetails();
+    this.handleIfRead()
+  }
+
+  fetchBookDetails = () => {
     let id = this.props.match.params.bookId;
     fetch(
       `https://www.googleapis.com/books/v1/volumes/${id}?key=${process.env.REACT_APP_GOOGLE_BOOKS_API_KEY}`
@@ -30,26 +32,36 @@ class BookDetails extends React.Component {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  handleIfRead(){
+      //TEST IF BOOK IS ALREADY READ
+    this.props.firebase.user(`${this.props.firebase.auth.currentUser.uid}/booksRead`).once("value")
+    .then( (snapshot) => {
+      snapshot.forEach((childSnapshot) => {
+          if(childSnapshot.val().id === this.props.match.params.bookId){
+              this.setState({isAlreadyRead:true})
+          };
+      })
+    })
+      
   }
 
-  addBook(id, title, authors, imageLinks, authUser) {
+  handleAddBook(id, title, authors, imageLinks, authUser){
+
+
+    //ADD BOOK TO DB
+    if(!this.state.isAlreadyRead){
+        const { small, thumbnail, medium } = imageLinks;
+        this.props.firebase.user(`${authUser.uid}/booksRead`).push({
+            id: id,
+            title: title,
+            authors: authors,
+            imageUrl: small || thumbnail || medium,
+          })
+          .then(()=> this.setState({isAlreadyRead:true}))
+    }
     
-    this.props.firebase.user(authUser.uid).once('value', function(snapshot) {
-        console.log(snapshot.child("booksRead").val().id)
-      });
-   
-    const {small, thumbnail} = imageLinks
-    this.props.firebase
-    .user(`${authUser.uid}/booksRead`)
-    .push({
-            "id": id,
-            "title": title,
-            "authors": authors,
-            "imageUrl": small || thumbnail
-      });
-      
-
-
   }
 
   render() {
@@ -58,8 +70,7 @@ class BookDetails extends React.Component {
       title,
       authors,
       imageLinks,
-      description
-      
+      description,
     } = this.state.bookInfo.volumeInfo;
     const { saleInfo, id } = this.state.bookInfo;
 
@@ -74,7 +85,7 @@ class BookDetails extends React.Component {
               src={imageLinks.small || imageLinks.thumbnail}
             ></img>
             <p>{title}</p>
-            <p>By {authors + ", "}</p>
+            <p>By {authors}</p>
             <p>
               {description ? (
                 description.replace(rex, "")
@@ -95,7 +106,15 @@ class BookDetails extends React.Component {
             ) : (
               <p>Not for sale</p>
             )}
-            <button onclick={this.addBook(id, title, authors, imageLinks, authUser)}>Add To Read</button>
+            {this.state.isAlreadyRead ? <p>Book in Shelf!</p>
+            :
+            <button
+              onClick={ e => {e.preventDefault(); this.handleAddBook(id, title, authors, imageLinks, authUser)}}
+            >
+              Add To Read
+            </button>
+            }
+            
           </div>
         )}
       </AuthUserContext.Consumer>
