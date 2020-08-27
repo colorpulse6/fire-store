@@ -1,40 +1,72 @@
 import React from "react";
 import { withAuthorization } from "../Session";
+import * as ROUTES from "../../constants/routes";
 
 class YourShelfPage extends React.Component {
+  userId = this.props.firebase.auth.currentUser.uid;
 
-userId = this.props.firebase.auth.currentUser.uid;
+  state = {
+    bookShelf: [],
+  };
 
-state = {
-    bookShelf:[]
-}
-
-componentDidMount(){
-    this.handleGetBooks()
-}
+  componentDidMount() {
+    this.handleGetBooks();
+  }
 
   handleGetBooks() {
+    let values = [{}];
     this.props.firebase
       .user(`${this.userId}/booksRead`)
       .once("value")
+      //GET KEY
       .then((snapshot) => {
         snapshot.forEach((childSnapshot) => {
-          this.setState({bookShelf:[...this.state.bookShelf, childSnapshot.val()]}, () => console.log(this.state.bookShelf))
+          values.push({
+            key: childSnapshot.key,
+            book: childSnapshot.val(),
+          });
         });
+        //SET KEY AND BOOK VALUE TO STATE OBJECT
+        values.shift();
+        this.setState({ bookShelf: values });
       });
   }
 
-  render() {
-    return <div>
-    {this.state.bookShelf.map((book)=> {
-        return <div>
-        <img alt={book.title} src={book.imageUrl}></img>
-        <p>{book.title}</p>
+  handleRemoveBooks(index) {
+    if(window.confirm('Are you sure you want to delete this book?')){
+        let bookItem = this.state.bookShelf[index];
+    //REMOVE ITEM FROM DB
+    
+    
+        this.props.firebase
+        .user(`${this.userId}/booksRead/${bookItem.key}`)
+        .remove();
+      //REMOVE ITEM FROM STATE
+      this.state.bookShelf.splice(index, 1);
+      this.setState({ bookShelf: this.state.bookShelf });
 
-        </div>
-    })}
-        
-    </div>;
+    }
+    
+    
+    
+  }
+
+  render() {
+    return (
+      <div>
+        {this.state.bookShelf.map((book, index) => {
+          return (
+            <div key={index}>
+              <img alt={book.book.title} src={book.book.imageUrl}></img>
+              <p>{book.book.title}</p>
+              <button onClick={this.handleRemoveBooks.bind(this, index)}>
+                Remove Book
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    );
   }
 }
 
