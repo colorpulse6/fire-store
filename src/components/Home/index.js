@@ -4,7 +4,6 @@ import { withAuthorization } from "../Session";
 import { AuthUserContext } from "../Session";
 
 class HomePage extends React.Component {
-
  
   render() {
    

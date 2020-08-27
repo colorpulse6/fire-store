@@ -1,7 +1,7 @@
 import React from "react";
 import { withAuthorization } from "../Session";
-import * as ROUTES from "../../constants/routes";
-
+import BookStyles from '../GoogleBooks/books.module.scss'
+ 
 class YourShelfPage extends React.Component {
   userId = this.props.firebase.auth.currentUser.uid;
 
@@ -53,11 +53,11 @@ class YourShelfPage extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className={BookStyles.container}>
         {this.state.bookShelf.map((book, index) => {
           return (
             <div key={index}>
-              <img alt={book.book.title} src={book.book.imageUrl}></img>
+              <img className={BookStyles.books} alt={book.book.title} src={book.book.imageUrl}></img>
               <p>{book.book.title}</p>
               <button onClick={this.handleRemoveBooks.bind(this, index)}>
                 Remove Book
