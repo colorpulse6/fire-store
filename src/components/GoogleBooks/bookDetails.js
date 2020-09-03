@@ -4,6 +4,7 @@ import { withAuthorization } from "../Session";
 import { AuthUserContext } from "../Session";
 import ButtonStyles from "../../constants/buttons.module.scss";
 import BookStyles from './books.module.scss'
+import LoadingGif from '../LoadingGif'
 class BookDetails extends React.Component {
   bookId = this.props.match.params.bookId;
   userId = this.props.firebase.auth.currentUser.uid;
@@ -106,9 +107,7 @@ class BookDetails extends React.Component {
   }
 
   render() {
-    if (this.state.loading) {
-      return <p>Loading...</p>;
-    }
+    
     const {
       title,
       authors,
@@ -120,6 +119,10 @@ class BookDetails extends React.Component {
     //REMOVE HTML TAGS
     const rex = /(<([^>]+)>)/gi;
     const { thumbnail, medium, smallThumbnail, large, small } = imageLinks;
+
+    if (this.state.loading) {
+      return <LoadingGif/>
+    }
     return (
       <AuthUserContext.Consumer>
         {(authUser) => (
