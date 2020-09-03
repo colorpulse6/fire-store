@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
 import FormStyles from '../form.module.scss'
-
+import ButtonStyles from '../../constants/buttons.module.scss'
 const PasswordForgetPage = () => (
   <div className={FormStyles.header}>
     <h1>PasswordForget</h1>
@@ -56,7 +56,7 @@ class PasswordForgetFormBase extends Component {
           type="text"
           placeholder="Email Address"
         />
-        <button disabled={isInvalid} type="submit">
+        <button disabled={isInvalid} type="submit" className={ButtonStyles.buttonPrimary}>
           Reset My Password
         </button>
  

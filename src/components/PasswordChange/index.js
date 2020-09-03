@@ -2,6 +2,7 @@ import React, { Component } from 'react';
  
 import { withFirebase } from '../Firebase';
 import FormStyles from '../form.module.scss'
+import ButtonStyles from '../../constants/buttons.module.scss'
 
 const INITIAL_STATE = {
   passwordOne: '',
@@ -57,7 +58,7 @@ class PasswordChangeForm extends Component {
           type="password"
           placeholder="Confirm New Password"
         />
-        <button disabled={isInvalid} type="submit">
+        <button disabled={isInvalid} type="submit" className={ButtonStyles.buttonPrimary}>
           Reset My Password
         </button>
  

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { withAuthorization } from "../Session";
 import { AuthUserContext } from "../Session";
 import ButtonStyles from "../../constants/buttons.module.scss";
+import BookStyles from './books.module.scss'
 class BookDetails extends React.Component {
   bookId = this.props.match.params.bookId;
   userId = this.props.firebase.auth.currentUser.uid;
@@ -84,7 +85,7 @@ class BookDetails extends React.Component {
             id: id,
             title: title,
             authors: authors,
-            imageUrl: small || thumbnail || medium || smallThumbnail || large,
+            imageUrl: smallThumbnail || large,
           })
           .then(() => this.setState({ isAlreadyRead: true }));
       }
@@ -97,7 +98,7 @@ class BookDetails extends React.Component {
             id: id,
             title: title,
             authors: authors,
-            imageUrl: small || thumbnail || medium || smallThumbnail || large,
+            imageUrl: smallThumbnail,
           })
           .then(() => this.setState({ isAlreadyRead: true }));
       }
@@ -122,22 +123,23 @@ class BookDetails extends React.Component {
     return (
       <AuthUserContext.Consumer>
         {(authUser) => (
-          <div>
+          <div className={BookStyles.bookDetails}>
             <img
               alt={title}
               src={smallThumbnail || medium || thumbnail || large || small}
             ></img>
             <p>{title}</p>
             <p>By {authors}</p>
-            <p>
+            <p className={BookStyles.description}>
               {description ? (
                 description.replace(rex, "")
               ) : (
                 <p>No Description Availabe</p>
               )}
             </p>
+            <div className={BookStyles.buttons}>
             {saleInfo.buyLink ? (
-              <div>
+              <div >
                 <a
                   rel="noopener noreferrer"
                   target="_blank"
@@ -165,7 +167,9 @@ class BookDetails extends React.Component {
               >
                 Add To Read
               </button>
+              
             )}
+            </div>
           </div>
         )}
       </AuthUserContext.Consumer>

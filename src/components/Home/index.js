@@ -12,7 +12,6 @@ class HomePage extends React.Component {
       <AuthUserContext.Consumer>
         {(authUser) => (
           <div>
-            <h1>Hello {authUser.displayName} </h1>
             <GoogleBooks />
           </div>
         )}

@@ -68,7 +68,7 @@ class YourShelfPage extends React.Component {
         {this.state.bookShelf.length !== 0 ? (
           this.state.bookShelf.map((book, index) => {
             return (
-              <div key={index}>
+              <div key={index} className={BookStyles.bookDiv}>
                 <Link to={`${ROUTES.BOOK_DETAILS}/${book.book.id}`}>
                   <img
                     className={BookStyles.books}
@@ -76,10 +76,9 @@ class YourShelfPage extends React.Component {
                     src={book.book.imageUrl}
                   ></img>
                 </Link>
-                <p>{book.book.title}</p>
                 <button
                   onClick={this.handleRemoveBooks.bind(this, index)}
-                  className={ButtonStyles.buttonPrimary}
+                  className={ButtonStyles.removeBook}
                 >
                   Remove Book
                 </button>

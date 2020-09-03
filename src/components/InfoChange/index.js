@@ -2,6 +2,7 @@ import React, { Component } from 'react';
  
 import { withFirebase } from '../Firebase';
 import FormStyles from '../form.module.scss'
+import ButtonStyles from '../../constants/buttons.module.scss'
 
 const INITIAL_STATE = {
   displayName: '',
@@ -51,7 +52,7 @@ class InfoChangeForm extends Component {
         />
         
         
-        <button disabled={isInvalid} type="submit">
+        <button disabled={isInvalid} type="submit" className={ButtonStyles.buttonPrimary}>
           Change Name
         </button>
  
