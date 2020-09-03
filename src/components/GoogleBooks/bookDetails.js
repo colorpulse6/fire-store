@@ -16,6 +16,7 @@ class BookDetails extends React.Component {
 
   componentDidMount() {
     this.fetchBookDetails();
+    console.log(this.state.sameTitle);
     this.handleIfRead();
   }
 
@@ -34,18 +35,21 @@ class BookDetails extends React.Component {
         console.log(err);
       })
       .then(() => {
-        var stringSimilarity = require('string-similarity');
+        var stringSimilarity = require("string-similarity");
 
         this.props.firebase
           .user(`${this.userId}/booksRead`)
           .once("value")
           .then((snapshot) => {
             snapshot.forEach((childSnapshot) => {
-              let amountSimilar = stringSimilarity.compareTwoStrings(childSnapshot.val().title, this.state.bookInfo.volumeInfo.title)  
-
-              if(amountSimilar > .1){
-                this.setState({sameTitle:true})
-              };
+              let amountSimilar = stringSimilarity.compareTwoStrings(
+                childSnapshot.val().title,
+                this.state.bookInfo.volumeInfo.title
+              );
+              console.log(amountSimilar < 0.3, childSnapshot.val().title);
+              if (amountSimilar > 0.3) {
+                this.setState({ sameTitle: true });
+              }
             });
           });
       });
@@ -67,10 +71,13 @@ class BookDetails extends React.Component {
 
   handleAddBook(id, title, authors, imageLinks) {
     //ADD BOOK TO DB
-    if(this.state.sameTitle){
-      let confirm = window.confirm("You have a book in your shelf that matches this title, are you sure you want to add it?")
+    //CHANGE THIS CONDITIONAL
+    const { small, thumbnail, medium, smallThumbnail, large } = imageLinks;
+    if (this.state.sameTitle) {
+      var confirm = window.confirm(
+        "You have a book in your shelf that is similar to this title, are you sure you want to add it?"
+      );
       if (!this.state.isAlreadyRead && confirm) {
-        const { small, thumbnail, medium, smallThumbnail, large } = imageLinks;
         this.props.firebase
           .user(`${this.userId}/booksRead`)
           .push({
@@ -82,7 +89,19 @@ class BookDetails extends React.Component {
           .then(() => this.setState({ isAlreadyRead: true }));
       }
     }
-    
+    if (!this.state.sameTitle) {
+      if (!this.state.isAlreadyRead) {
+        this.props.firebase
+          .user(`${this.userId}/booksRead`)
+          .push({
+            id: id,
+            title: title,
+            authors: authors,
+            imageUrl: small || thumbnail || medium || smallThumbnail || large,
+          })
+          .then(() => this.setState({ isAlreadyRead: true }));
+      }
+    }
   }
 
   render() {
@@ -106,7 +125,7 @@ class BookDetails extends React.Component {
           <div>
             <img
               alt={title}
-              src={medium || thumbnail || smallThumbnail || large || small}
+              src={smallThumbnail || medium || thumbnail || large || small}
             ></img>
             <p>{title}</p>
             <p>By {authors}</p>
