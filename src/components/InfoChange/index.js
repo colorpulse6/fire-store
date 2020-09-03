@@ -40,8 +40,12 @@ class InfoChangeForm extends Component {
  
     const isInvalid =
      displayName === '';
- 
+     
+     if(this.state.error){
+      return <div>{this.state.error}</div>
+    }
     return (
+      
       <form onSubmit={this.onSubmit} className={FormStyles.container}>
         <input
           name="displayName"
