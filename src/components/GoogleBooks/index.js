@@ -62,11 +62,12 @@ class SearchBooks extends React.Component {
           onChange={this.handleFilter}
           placeholder={"Search Books..."}
         ></Input>
-
+<div className={BookStyles.container}>
         {this.state.filteredBooks ? (
           this.state.filteredBooks.map((book, index) => {
             return (
               <Link to={`${ROUTES.BOOK_DETAILS}/${book.id}`}>
+              
                 <img
                   alt={book.volumeInfo.title}
                   className={BookStyles.books}
@@ -76,10 +77,12 @@ class SearchBooks extends React.Component {
                     book.volumeInfo.imageLinks.smallThumbnail
                   }
                 ></img>
+               
               </Link>
             );
           })
         ) : null}
+        </div>
       </div>
     );
   }
