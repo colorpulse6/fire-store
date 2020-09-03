@@ -7,7 +7,7 @@ import { PasswordForgetLink } from '../PasswordForget';
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
 import FormStyles from '../form.module.scss'
-
+import ButtonStyles from '../../constants/buttons.module.scss'
 const SignInPage = () => (
   <div className={FormStyles.header}>
     <h1>SignIn</h1>
@@ -71,7 +71,7 @@ class SignInFormBase extends Component {
           type="password"
           placeholder="Password"
         />
-        <button disabled={isInvalid} type="submit">
+        <button className={ButtonStyles.buttonPrimary} disabled={isInvalid} type="submit">
           Sign In
         </button>
  

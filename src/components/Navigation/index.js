@@ -30,7 +30,7 @@ const NavigationAuth = () => (
     <li>
       <AuthUserContext>
         {(authUser) => (
-          <Link to={ROUTES.YOUR_SHELF}>{authUser.displayName}</Link>
+          <Link to={ROUTES.ACCOUNT}>{authUser.displayName}</Link>
         )}
       </AuthUserContext>
     </li>
