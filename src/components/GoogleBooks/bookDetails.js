@@ -73,7 +73,7 @@ class BookDetails extends React.Component {
   handleAddBook(id, title, authors, imageLinks) {
     //ADD BOOK TO DB
     //CHANGE THIS CONDITIONAL
-    const { small, thumbnail, medium, smallThumbnail, large } = imageLinks;
+    const { smallThumbnail, large } = imageLinks;
     if (this.state.sameTitle) {
       var confirm = window.confirm(
         "You have a book in your shelf that is similar to this title, are you sure you want to add it?"

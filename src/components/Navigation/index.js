@@ -19,7 +19,7 @@ const Navigation = () => (
 const NavigationAuth = () => (
   <div className={NavStyles.container}>
     <li>
-      <Link to={ROUTES.LANDING}><img src={bookImage} className={NavStyles.bookImage}></img></Link>
+      <Link to={ROUTES.LANDING}><img alt="book" src={bookImage} className={NavStyles.bookImage}></img></Link>
     </li>
     <li>
       <Link to={ROUTES.HOME}>Home</Link>
