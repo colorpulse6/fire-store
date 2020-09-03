@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom'
 import { withAuthorization } from "../Session";
 import { AuthUserContext } from "../Session";
 
@@ -26,6 +27,7 @@ class BookDetails extends React.Component {
         console.log(err);
       })
       .then((book) => {
+        console.log(book)
         this.setState({ bookInfo: book, loading: false });
       })
       .catch((err) => {
@@ -50,21 +52,23 @@ class BookDetails extends React.Component {
   handleAddBook(id, title, authors, imageLinks) {
     //ADD BOOK TO DB
     if (!this.state.isAlreadyRead) {
-      const { small, thumbnail, medium } = imageLinks;
+      const { small, thumbnail, medium, smallThumbnail, large } = imageLinks;
       this.props.firebase
         .user(`${this.userId}/booksRead`)
         .push({
           id: id,
           title: title,
           authors: authors,
-          imageUrl: small || thumbnail || medium,
+          imageUrl: small || thumbnail || medium || smallThumbnail || large,
         })
         .then(() => this.setState({ isAlreadyRead: true }));
     }
   }
 
   render() {
-    if (this.state.loading) return <p>Loading...</p>;
+    if (this.state.loading) {
+      return <p>Loading...</p>;
+    }
     const {
       title,
       authors,
@@ -75,13 +79,14 @@ class BookDetails extends React.Component {
 
     //REMOVE HTML TAGS
     const rex = /(<([^>]+)>)/gi;
+    const { thumbnail, medium, smallThumbnail, large, small} = imageLinks
     return (
       <AuthUserContext.Consumer>
         {(authUser) => (
           <div>
             <img
               alt={title}
-              src={imageLinks.small || imageLinks.thumbnail}
+              src={ thumbnail || medium || smallThumbnail || large || small}
             ></img>
             <p>{title}</p>
             <p>By {authors}</p>
@@ -106,7 +111,7 @@ class BookDetails extends React.Component {
               <p>Not for sale</p>
             )}
             {this.state.isAlreadyRead ? (
-              <p>Book in Shelf!</p>
+              <Link to="/your-shelf"><p>Book in Shelf!</p></Link>
             ) : (
               <button
                 onClick={(e) => {

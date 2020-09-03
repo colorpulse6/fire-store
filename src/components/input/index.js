@@ -1,5 +1,6 @@
 import React from "react";
 import InputStyles from "./input.module.scss";
+
 export default function Input(props) {
   return (
     <div className={InputStyles.input}>

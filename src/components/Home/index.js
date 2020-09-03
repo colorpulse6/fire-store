@@ -4,9 +4,10 @@ import { withAuthorization } from "../Session";
 import { AuthUserContext } from "../Session";
 
 class HomePage extends React.Component {
- 
+
   render() {
-   
+    const { authUser } = this.context;
+    console.log(authUser)
     return (
       <AuthUserContext.Consumer>
         {(authUser) => (
