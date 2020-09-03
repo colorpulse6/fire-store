@@ -1,18 +1,25 @@
 import React from "react";
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
 import { withAuthorization } from "../Session";
 import BookStyles from "../GoogleBooks/books.module.scss";
+import ButtonStyles from "../../constants/buttons.module.scss";
+import * as ROUTES from "../../constants/routes";
+
+import LoadingGif from '../LoadingGif'
 
 class YourShelfPage extends React.Component {
   userId = this.props.firebase.auth.currentUser.uid;
 
   state = {
     bookShelf: [],
+    loading:true
   };
 
   componentDidMount() {
     this.handleGetBooks();
-    console.log(this.state.bookShelf)
+    
+
+    
   }
 
   handleGetBooks() {
@@ -30,7 +37,8 @@ class YourShelfPage extends React.Component {
         });
         //SET KEY AND BOOK VALUE TO STATE OBJECT
         values.shift();
-        this.setState({ bookShelf: values });
+        this.setState({ bookShelf: values, loading:false }, () => console.log(this.state.bookShelf)
+        );
       });
   }
 
@@ -49,23 +57,40 @@ class YourShelfPage extends React.Component {
   }
 
   render() {
+   if(this.state.loading){
+    return <LoadingGif/>
+   }
+   
     return (
       <div className={BookStyles.container}>
-        {this.state.bookShelf.length !== 0 ? this.state.bookShelf.map((book, index) => {
-          return (
-            <div key={index}>
-              <img
-                className={BookStyles.books}
-                alt={book.book.title}
-                src={book.book.imageUrl}
-              ></img>
-              <p>{book.book.title}</p>
-              <button onClick={this.handleRemoveBooks.bind(this, index)}>
-                Remove Book
-              </button>
-            </div>
-          );
-        }) : <p>You have not saved any books, <Link to="/home">Add Books?</Link></p>}
+
+      {/* TEST THIS */}
+        {this.state.bookShelf.length !== 0 ? (
+          this.state.bookShelf.map((book, index) => {
+            return (
+              <div key={index}>
+                <Link to={`${ROUTES.BOOK_DETAILS}/${book.book.id}`}>
+                  <img
+                    className={BookStyles.books}
+                    alt={book.book.title}
+                    src={book.book.imageUrl}
+                  ></img>
+                </Link>
+                <p>{book.book.title}</p>
+                <button
+                  onClick={this.handleRemoveBooks.bind(this, index)}
+                  className={ButtonStyles.buttonPrimary}
+                >
+                  Remove Book
+                </button>
+              </div>
+            );
+          })
+        ) : (
+          <p>
+            You have not saved any books, <Link to="/home">Add Books?</Link>
+          </p>
+        )}
       </div>
     );
   }

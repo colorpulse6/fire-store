@@ -3,6 +3,7 @@ import BookStyles from "./books.module.scss";
 import Input from "../input";
 import { Link } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
+import LoadingGif from '../LoadingGif'
 
 class SearchBooks extends React.Component {
   state = {
@@ -12,7 +13,7 @@ class SearchBooks extends React.Component {
   };
   componentDidMount() {
     this.getBooks(this.state.input);
-    this.setState({ loading: false });
+    
   }
 
   handleFilter = (e) => {
@@ -37,7 +38,7 @@ class SearchBooks extends React.Component {
         this.setState({
           filteredBooks: filteredBooks.items,
           input: input,
-          isLoading: false,
+          loading: false,
         });
       });
     this.setSearchTerm(input);
@@ -53,7 +54,7 @@ class SearchBooks extends React.Component {
 
   render() {
     if (this.state.loading) {
-      return <div>Loading...</div>;
+      return <LoadingGif/>
     }
     return (
       <div>
