@@ -79,9 +79,7 @@ class SearchBooks extends React.Component {
               </Link>
             );
           })
-        ) : (
-          <p>No Books Found</p>
-        )}
+        ) : null}
       </div>
     );
   }
