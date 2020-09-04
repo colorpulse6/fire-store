@@ -1,6 +1,6 @@
 ## About
 
-A simple Book collection app using Google Books API
+A simple Book collection app using Google Books API.  The app is still in production.
 
 ### Stack
 

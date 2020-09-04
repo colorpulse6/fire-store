@@ -18,8 +18,8 @@ class BookDetails extends React.Component {
 
   componentDidMount() {
     this.fetchBookDetails();
-    console.log(this.state.sameTitle);
     this.handleIfRead();
+    console.log(this.state.bookInfo.volumeInfo)
   }
 
   fetchBookDetails = () => {
@@ -42,6 +42,8 @@ class BookDetails extends React.Component {
         this.props.firebase
           .user(`${this.userId}/booksRead`)
           .once("value")
+
+          //CHECK SIMILARITY
           .then((snapshot) => {
             snapshot.forEach((childSnapshot) => {
               let amountSimilar = stringSimilarity.compareTwoStrings(
@@ -107,7 +109,9 @@ class BookDetails extends React.Component {
   }
 
   render() {
-    
+    if (this.state.loading) {
+      return <LoadingGif/>
+    }
     const {
       title,
       authors,
@@ -120,9 +124,7 @@ class BookDetails extends React.Component {
     const rex = /(<([^>]+)>)/gi;
     const { thumbnail, medium, smallThumbnail, large, small } = imageLinks;
 
-    if (this.state.loading) {
-      return <LoadingGif/>
-    }
+   
     return (
       <AuthUserContext.Consumer>
         {(authUser) => (
