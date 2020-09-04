@@ -11,3 +11,5 @@ https://fire-store.netlify.app
 
 ## Attributions
 Icons made by https://www.flaticon.com/authors/freepik at https://www.flaticon.com/ 
+
+Shout out to sweetalert2 for awesome alert windows => https://sweetalert2.github.io/

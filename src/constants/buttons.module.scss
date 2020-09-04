@@ -2,11 +2,14 @@
     color: #4EA5D9 !important;
     text-transform: uppercase;
     background: #ffffff;
-    padding: 10px;
+    padding: 8px;
     border: 2px solid #4EA5D9 !important;
     border-radius: 6px;
     display: inline-block;
     transition: all 0.3s ease 0s;
+    font-size: 10px;
+    outline: none;
+
 }
 
 .buttonPrimary:hover {
@@ -32,8 +35,8 @@
     transition: all 0.3s ease 0s;
     outline: none;
     font-size: 10px;
-    margin-top: -10px;
-  
+    margin-left:10px;
+
 
 }
 

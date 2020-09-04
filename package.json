@@ -18,7 +18,8 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
     "recompose": "^0.30.0",
-    "string-similarity": "^4.0.2"
+    "string-similarity": "^4.0.2",
+    "sweetalert2": "^9.17.2"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -6,7 +6,10 @@ import ButtonStyles from "../../constants/buttons.module.scss";
 import * as ROUTES from "../../constants/routes";
 
 import LoadingGif from "../LoadingGif";
-import FireGif from "../FireGif"
+import FireGif from "../FireGif";
+
+import Swal from "sweetalert2";
+
 class ShelfTemplate extends React.Component {
   userId = this.props.firebase.auth.currentUser.uid;
 
@@ -14,7 +17,7 @@ class ShelfTemplate extends React.Component {
     bookShelf: [],
     isAlreadyRead: false,
     loading: true,
-    lightFire:false
+    lightFire: false,
   };
 
   componentDidMount() {
@@ -43,22 +46,62 @@ class ShelfTemplate extends React.Component {
   }
 
   handleRemoveBooks(index) {
-    if (window.confirm("Are you sure you want to delete this book?")) {
-      let bookItem = this.state.bookShelf[index];
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: ButtonStyles.removeBook,
+        cancelButton: ButtonStyles.buttonPrimary,
+      },
+      buttonsStyling: false,
+      
+    });
+    
+      swalWithBootstrapButtons
+        .fire({
+          
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes, delete it!",
+          cancelButtonText: "No, cancel!",
+          reverseButtons: true,
+         
+          
+        })
+        .then((result) => {
+          if (result.value) {
+            swalWithBootstrapButtons.fire(
+              "Deleted!",
+              "Your file has been deleted.",
+              "success"
+            );
+            let bookItem = this.state.bookShelf[index];
       //REMOVE ITEM FROM DB
 
       this.props.firebase
         .user(`${this.userId}/${this.props.shelfUrl}/${bookItem.key}`)
         .remove();
       //REMOVE ITEM FROM STATE
-      this.setState({lightFire:true})
-      setTimeout(()=> {
+      this.setState({ lightFire: true });
+      setTimeout(() => {
         this.state.bookShelf.splice(index, 1);
-      this.setState({ bookShelf: this.state.bookShelf});
-      this.setState({lightFire:false})
-      }, 2000)
+        this.setState({ bookShelf: this.state.bookShelf });
+        this.setState({ lightFire: false });
+      }, 2000);
+          } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+          ) {
+            swalWithBootstrapButtons.fire(
+              "Cancelled",
+              "Your file is safe :)",
+              "error"
+            );
+          }
+        })
+     
       
-    }
+    
   }
 
   handleAddBookToRead(index, id, title, authors, imageUrl) {
@@ -79,7 +122,7 @@ class ShelfTemplate extends React.Component {
           //REMOVE ITEM FROM STATE
           this.state.bookShelf.splice(index, 1);
           this.setState({ bookShelf: this.state.bookShelf });
-          alert('Book added to Books Read List!')
+          alert("Book added to Books Read List!");
         });
     }
   }
@@ -104,34 +147,32 @@ class ShelfTemplate extends React.Component {
                       alt={book.book.title}
                       src={book.book.imageUrl}
                     ></img>
-                    {this.state.lightFire ? <FireGif />: null}
-                    
+                    {this.state.lightFire ? <FireGif /> : null}
                   </Link>
                   <div className={BookStyles.buttons}>
-                  <button
-                    onClick={this.handleRemoveBooks.bind(this, index)}
-                    className={ButtonStyles.removeBook}
-                  >
-                    Remove Book
-                  </button>
-                  {this.props.shelfUrl === "readingList" ? (
                     <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        this.handleAddBookToRead(
-                          index,
-                          book.book.id,
-                          book.book.title,
-                          book.book.authors,
-                          book.book.imageUrl
-                        );
-                      }}
+                      onClick={this.handleRemoveBooks.bind(this, index)}
                       className={ButtonStyles.removeBook}
                     >
-                      Finished?
-                      
+                      Remove Book
                     </button>
-                  ) : null}
+                    {this.props.shelfUrl === "readingList" ? (
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          this.handleAddBookToRead(
+                            index,
+                            book.book.id,
+                            book.book.title,
+                            book.book.authors,
+                            book.book.imageUrl
+                          );
+                        }}
+                        className={ButtonStyles.removeBook}
+                      >
+                        Finished?
+                      </button>
+                    ) : null}
                   </div>
                 </div>
               );

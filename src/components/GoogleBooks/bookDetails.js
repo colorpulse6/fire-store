@@ -142,7 +142,7 @@ class BookDetails extends React.Component {
         "Looks like you have already read this book, are you sure you want to add it to your list?"
       );
     }
-    if (confirm) {
+    if (confirm && !this.state.isInReadingList) {
       this.addToDb("readingList", id, title, authors, imageLinks);
     }
     if (!this.state.isInReadingList) {
