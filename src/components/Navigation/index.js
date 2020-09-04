@@ -34,7 +34,7 @@ const NavigationAuth = () => {
       </li>
       <li
         onClick={() => {
-          setisActive(!isActive);
+          setisActive(false);
         }}
       >
         <Link to={ROUTES.HOME}>Home</Link>
@@ -66,7 +66,7 @@ const NavigationAuth = () => {
                 <Link
                   to={ROUTES.BOOKS_READ}
                   onClick={() => {
-                    setisActive(!isActive);
+                    setisActive(false);
                   }}
                 >
                   Books Read
@@ -76,7 +76,7 @@ const NavigationAuth = () => {
                 <Link
                   to={ROUTES.TO_READ_LIST}
                   onClick={() => {
-                    setisActive(!isActive);
+                    setisActive(false);
                   }}
                 >
                   Books To Read
