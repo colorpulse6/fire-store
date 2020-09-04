@@ -10,11 +10,8 @@ const INITIAL_STATE = {
 };
  
 class InfoChangeForm extends Component {
- 
-    
- 
+
   state = { ...INITIAL_STATE };
-  
  
   onSubmit = event => {
     const { displayName } = this.state;
@@ -37,15 +34,13 @@ class InfoChangeForm extends Component {
  
   render() {
     const { displayName } = this.state;
- 
-    const isInvalid =
-     displayName === '';
-     
-     if(this.state.error){
-      return <div>{this.state.error}</div>
+
+    const isInvalid = displayName === "";
+
+    if (this.state.error) {
+      return <div>{this.state.error}</div>;
     }
     return (
-      
       <form onSubmit={this.onSubmit} className={FormStyles.container}>
         <input
           name="displayName"
@@ -54,12 +49,14 @@ class InfoChangeForm extends Component {
           type="username"
           placeholder="New Name"
         />
-        
-        
-        <button disabled={isInvalid} type="submit" className={ButtonStyles.buttonPrimary}>
+
+        <button
+          disabled={isInvalid}
+          type="submit"
+          className={ButtonStyles.buttonPrimary}
+        >
           Change Name
         </button>
- 
       </form>
     );
   }

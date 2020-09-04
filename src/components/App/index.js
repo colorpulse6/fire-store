@@ -10,6 +10,7 @@ import AccountPage from "../Account";
 // import AdminPage from "../Admin";
 import BookDetailsPage from "../GoogleBooks/bookDetails";
 import YourShelfPage from "../YourShelf";
+import ToReadList from '../YourShelf/toReadList'
 
 import * as ROUTES from "../../constants/routes";
 
@@ -31,7 +32,8 @@ const App = () => (
         path={`${ROUTES.BOOK_DETAILS}/:bookId`}
         component={BookDetailsPage}
       />
-      <Route path={`${ROUTES.YOUR_SHELF}`} component={YourShelfPage} />
+      <Route exact path={`${ROUTES.YOUR_SHELF}`} component={YourShelfPage} />
+      <Route path={`${ROUTES.TO_READ_LIST}`} component={ToReadList} />
     </div>
   </Router>
 );

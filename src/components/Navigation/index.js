@@ -1,14 +1,17 @@
-import React from "react";
+import React, {useState} from "react";
 import { Link } from "react-router-dom";
 import SignOutButton from "../SignOut";
 
 import * as ROUTES from "../../constants/routes";
 import { AuthUserContext } from "../Session";
 import NavStyles from "./navigation.module.scss";
-
-import bookImage from '../imgs/book.png'
+import 'bulma/css/bulma.css';
+import bookImage from "../imgs/book.png";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
 
 const Navigation = () => (
+
   <div>
     <AuthUserContext>
       {(authUser) => (authUser ? <NavigationAuth /> : <NavigationNonAuth />)}
@@ -16,22 +19,54 @@ const Navigation = () => (
   </div>
 );
 
-const NavigationAuth = () => (
+const NavigationAuth = () => {
+  const [isActive, setisActive] = useState(false);
+
+  return(
   <div className={NavStyles.container}>
     <li>
-      <Link to={ROUTES.LANDING}><img alt="book" src={bookImage} className={NavStyles.bookImage}></img></Link>
+      <Link to={ROUTES.LANDING}>
+        <img alt="book" src={bookImage} className={NavStyles.bookImage}></img>
+      </Link>
     </li>
     <li>
       <Link to={ROUTES.HOME}>Home</Link>
     </li>
     <li>
-      <Link to={ROUTES.YOUR_SHELF}>Your Shelf</Link>
+      <div className={`dropdown ${isActive ? "is-active" : ""}`}>
+        <div class="dropdown-trigger">
+          <li
+            onClick={() => {
+              setisActive(!isActive);
+            }}
+            
+            style={{borderStyle:'none', cursor:'pointer'}}
+            aria-haspopup="true"
+            aria-controls="dropdown-menu2"
+          >
+            <a>Your Shelf</a>
+            <span class="icon is-small">
+              <FontAwesomeIcon icon={faAngleDown} alt="angle down" style={{marginLeft:'10px', width:'8px'}}></FontAwesomeIcon>
+            </span>
+          </li>
+        </div>
+        <div class="dropdown-menu" id="dropdown-menu2" role="menu">
+          <div class="dropdown-content">
+            <div class="dropdown-item">
+              <Link to={ROUTES.YOUR_SHELF}>Books Read</Link>
+            </div>
+            <div class="dropdown-item">
+              <Link to={ROUTES.TO_READ_LIST}>Books To Read</Link>
+            </div>
+          </div>
+        </div>
+        <Link to={ROUTES.YOUR_SHELF}></Link>
+      </div>
     </li>
+
     <li>
       <AuthUserContext>
-        {(authUser) => (
-          <Link to={ROUTES.ACCOUNT}>{authUser.displayName}</Link>
-        )}
+        {(authUser) => <Link to={ROUTES.ACCOUNT}>{authUser.displayName}</Link>}
       </AuthUserContext>
     </li>
     {/* <li>
@@ -41,7 +76,8 @@ const NavigationAuth = () => (
       <SignOutButton />
     </li>
   </div>
-);
+  )
+  };
 
 const NavigationNonAuth = () => (
   <div className={NavStyles.container}>
