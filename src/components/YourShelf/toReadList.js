@@ -1,11 +1,12 @@
-import React, { Component } from 'react'
+import React from "react";
+import ShelfTemplate from "./index";
 
-export default class ToReadList extends Component {
-    render() {
-        return (
-            <div>
-                to read
-            </div>
-        )
-    }
+export default function ToReadList(){
+ 
+    return (
+      <div>
+        <ShelfTemplate shelfUrl="readingList" />
+      </div>
+    );
+  
 }

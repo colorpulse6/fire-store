@@ -5,27 +5,25 @@ import BookStyles from "../GoogleBooks/books.module.scss";
 import ButtonStyles from "../../constants/buttons.module.scss";
 import * as ROUTES from "../../constants/routes";
 
-import LoadingGif from '../LoadingGif'
+import LoadingGif from "../LoadingGif";
 
-class YourShelfPage extends React.Component {
+class ShelfTemplate extends React.Component {
   userId = this.props.firebase.auth.currentUser.uid;
 
   state = {
     bookShelf: [],
-    loading:true
+    isAlreadyRead: false,
+    loading: true,
   };
 
   componentDidMount() {
-    this.handleGetBooks();
-    
-
-    
+    this.handleGetBooksRead();
   }
 
-  handleGetBooks() {
+  handleGetBooksRead() {
     let values = [{}];
     this.props.firebase
-      .user(`${this.userId}/booksRead`)
+      .user(`${this.userId}/${this.props.shelfUrl}`)
       .once("value")
       //GET KEY
       .then((snapshot) => {
@@ -37,7 +35,8 @@ class YourShelfPage extends React.Component {
         });
         //SET KEY AND BOOK VALUE TO STATE OBJECT
         values.shift();
-        this.setState({ bookShelf: values, loading:false }, () => console.log(this.state.bookShelf)
+        this.setState({ bookShelf: values, loading: false }, () =>
+          console.log(this.state.bookShelf)
         );
       });
   }
@@ -48,7 +47,7 @@ class YourShelfPage extends React.Component {
       //REMOVE ITEM FROM DB
 
       this.props.firebase
-        .user(`${this.userId}/booksRead/${bookItem.key}`)
+        .user(`${this.userId}/${this.props.shelfUrl}/${bookItem.key}`)
         .remove();
       //REMOVE ITEM FROM STATE
       this.state.bookShelf.splice(index, 1);
@@ -56,15 +55,36 @@ class YourShelfPage extends React.Component {
     }
   }
 
+  handleAddBookToRead(index, id, title, authors, imageUrl) {
+    if (window.confirm("Are you sure you have finished reading this book?")) {
+      let bookItem = this.state.bookShelf[index];
+      this.props.firebase
+        .user(`${this.userId}/booksRead`)
+        .push({
+          id: id,
+          title: title,
+          authors: authors,
+          imageUrl: imageUrl,
+        })
+        .then(() => {
+          this.props.firebase
+            .user(`${this.userId}/${this.props.shelfUrl}/${bookItem.key}`)
+            .remove();
+          //REMOVE ITEM FROM STATE
+          this.state.bookShelf.splice(index, 1);
+          this.setState({ bookShelf: this.state.bookShelf });
+        });
+    }
+  }
+
   render() {
-   if(this.state.loading){
-    return <LoadingGif/>
-   }
-   
+    if (this.state.loading) {
+      return <LoadingGif />;
+    }
+
     return (
       <div className={BookStyles.container}>
-
-      {/* TEST THIS */}
+        {/* TEST THIS */}
         {this.state.bookShelf.length !== 0 ? (
           this.state.bookShelf.map((book, index) => {
             return (
@@ -82,6 +102,23 @@ class YourShelfPage extends React.Component {
                 >
                   Remove Book
                 </button>
+                {this.props.shelfUrl === "readingList" ? (
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      this.handleAddBookToRead(
+                        index,
+                        book.book.id,
+                        book.book.title,
+                        book.book.authors,
+                        book.book.imageUrl
+                      );
+                    }}
+                    className={ButtonStyles.removeBook}
+                  >
+                    Finished?
+                  </button>
+                ) : null}
               </div>
             );
           })
@@ -97,4 +134,4 @@ class YourShelfPage extends React.Component {
 
 const condition = (authUser) => !!authUser;
 
-export default withAuthorization(condition)(YourShelfPage);
+export default withAuthorization(condition)(ShelfTemplate);

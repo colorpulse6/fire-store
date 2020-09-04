@@ -9,9 +9,9 @@ import HomePage from "../Home";
 import AccountPage from "../Account";
 // import AdminPage from "../Admin";
 import BookDetailsPage from "../GoogleBooks/bookDetails";
-import YourShelfPage from "../YourShelf";
-import ToReadList from '../YourShelf/toReadList'
-
+import ShelfTemplate from "../YourShelf";
+import ToReadList from "../YourShelf/toReadList";
+import BooksReadList from "../YourShelf/booksReadList";
 import * as ROUTES from "../../constants/routes";
 
 import { withAuthentication } from "../Session";
@@ -32,8 +32,9 @@ const App = () => (
         path={`${ROUTES.BOOK_DETAILS}/:bookId`}
         component={BookDetailsPage}
       />
-      <Route exact path={`${ROUTES.YOUR_SHELF}`} component={YourShelfPage} />
-      <Route path={`${ROUTES.TO_READ_LIST}`} component={ToReadList} />
+      <Route exact path={`${ROUTES.YOUR_SHELF}`} component={ShelfTemplate} />
+      <Route exact path={`${ROUTES.TO_READ_LIST}`} component={ToReadList} />
+      <Route exact path={`${ROUTES.BOOKS_READ}`} component={BooksReadList} />
     </div>
   </Router>
 );
