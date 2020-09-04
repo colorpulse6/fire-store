@@ -6,6 +6,7 @@ export default function booksReadList() {
         <div>
             <ShelfTemplate 
                 shelfUrl = 'booksRead'
+                header="Books Finshed"
             />
         </div>
     )

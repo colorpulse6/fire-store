@@ -198,7 +198,7 @@ class BookDetails extends React.Component {
               )}
 
               {this.state.isAlreadyRead ? (
-                <Link to="/your-shelf">
+                <Link to="/your-shelf/books-read">
                   <p>Book in Shelf!</p>
                 </Link>
               ) : (

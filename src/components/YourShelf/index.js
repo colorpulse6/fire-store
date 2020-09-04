@@ -83,50 +83,53 @@ class ShelfTemplate extends React.Component {
     }
 
     return (
-      <div className={BookStyles.container}>
-        {/* TEST THIS */}
-        {this.state.bookShelf.length !== 0 ? (
-          this.state.bookShelf.map((book, index) => {
-            return (
-              <div key={index} className={BookStyles.bookDiv}>
-                <Link to={`${ROUTES.BOOK_DETAILS}/${book.book.id}`}>
-                  <img
-                    className={BookStyles.books}
-                    alt={book.book.title}
-                    src={book.book.imageUrl}
-                  ></img>
-                </Link>
-                <button
-                  onClick={this.handleRemoveBooks.bind(this, index)}
-                  className={ButtonStyles.removeBook}
-                >
-                  Remove Book
-                </button>
-                {this.props.shelfUrl === "readingList" ? (
+      <div className={BookStyles.main}>
+        <h1>{this.props.header}</h1>
+        <div className={BookStyles.container}>
+          {/* TEST THIS */}
+          {this.state.bookShelf.length !== 0 ? (
+            this.state.bookShelf.map((book, index) => {
+              return (
+                <div key={index} className={BookStyles.bookDiv}>
+                  <Link to={`${ROUTES.BOOK_DETAILS}/${book.book.id}`}>
+                    <img
+                      className={BookStyles.books}
+                      alt={book.book.title}
+                      src={book.book.imageUrl}
+                    ></img>
+                  </Link>
                   <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      this.handleAddBookToRead(
-                        index,
-                        book.book.id,
-                        book.book.title,
-                        book.book.authors,
-                        book.book.imageUrl
-                      );
-                    }}
+                    onClick={this.handleRemoveBooks.bind(this, index)}
                     className={ButtonStyles.removeBook}
                   >
-                    Finished?
+                    Remove Book
                   </button>
-                ) : null}
-              </div>
-            );
-          })
-        ) : (
-          <p>
-            You have not saved any books, <Link to="/home">Add Books?</Link>
-          </p>
-        )}
+                  {this.props.shelfUrl === "readingList" ? (
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        this.handleAddBookToRead(
+                          index,
+                          book.book.id,
+                          book.book.title,
+                          book.book.authors,
+                          book.book.imageUrl
+                        );
+                      }}
+                      className={ButtonStyles.removeBook}
+                    >
+                      Finished?
+                    </button>
+                  ) : null}
+                </div>
+              );
+            })
+          ) : (
+            <p>
+              You have not saved any books, <Link to="/home">Add Books?</Link>
+            </p>
+          )}
+        </div>
       </div>
     );
   }

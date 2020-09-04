@@ -5,7 +5,11 @@ export default function ToReadList(){
  
     return (
       <div>
-        <ShelfTemplate shelfUrl="readingList" />
+        <ShelfTemplate 
+        shelfUrl="readingList" 
+        header="Books to Read"
+
+        />
       </div>
     );
   
