@@ -20,8 +20,11 @@ class SearchBooks extends React.Component {
     e.preventDefault();
 
     //Handle no input
-    let input = e.target.value || this.state.input;
-    this.getBooks(input);
+    var input = e.target.value || this.state.input;
+    
+      this.getBooks(input);
+  
+    
   };
 
   getBooks = (input) => {
@@ -44,7 +47,7 @@ class SearchBooks extends React.Component {
     this.setSearchTerm(input);
   };
 
-  //LOCAL STORAGE
+  //LOCAL STORAGE OF SEARCH TERM
 
   setSearchTerm = (input) => {
     this.setState({ input: input }, () => {

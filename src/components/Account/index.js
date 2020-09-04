@@ -3,14 +3,14 @@ import React from 'react';
 import { PasswordForgetForm } from '../PasswordForget';
 import PasswordChangeForm from '../PasswordChange';
 import InfoChangeForm from '../InfoChange';
-
+import BookStyles from '../GoogleBooks/books.module.scss'
 import { AuthUserContext, withAuthorization } from '../Session';
  
 const AccountPage = () => (
   <AuthUserContext.Consumer>
     {authUser => (
-  <div>
-  <h1>Account: {authUser.displayName}</h1>
+  <div className={BookStyles.main}>
+  <h1>{authUser.displayName}</h1>
     <PasswordForgetForm />
     <PasswordChangeForm />
     <InfoChangeForm />

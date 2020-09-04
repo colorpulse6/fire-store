@@ -115,15 +115,18 @@ class BookDetails extends React.Component {
   handleAddBookToRead(id, title, authors, imageLinks) {
     //ADD BOOK TO DB READ
     //CHANGE THIS CONDITIONAL
-    if (this.state.sameTitle) {
+    if (this.state.isInReadingList) {
+      alert("This book is already in your reading list!");
+    }
+    if (this.state.sameTitle && !this.state.isInReadingList) {
       var confirm = window.confirm(
         "You have a book in your shelf that is similar to this title, are you sure you want to add it?"
       );
-      if (!this.state.isAlreadyRead && confirm) {
+      if (!this.state.isAlreadyRead && confirm && !this.state.isInReadingList) {
         this.addToDb("booksRead", id, title, authors, imageLinks);
       }
     }
-    if (!this.state.sameTitle) {
+    if (!this.state.sameTitle && !this.state.isInReadingList) {
       if (!this.state.isAlreadyRead) {
         this.addToDb("booksRead", id, title, authors, imageLinks);
       }

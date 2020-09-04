@@ -6,7 +6,7 @@ import ButtonStyles from "../../constants/buttons.module.scss";
 import * as ROUTES from "../../constants/routes";
 
 import LoadingGif from "../LoadingGif";
-
+import FireGif from "../FireGif"
 class ShelfTemplate extends React.Component {
   userId = this.props.firebase.auth.currentUser.uid;
 
@@ -14,6 +14,7 @@ class ShelfTemplate extends React.Component {
     bookShelf: [],
     isAlreadyRead: false,
     loading: true,
+    lightFire:false
   };
 
   componentDidMount() {
@@ -50,8 +51,13 @@ class ShelfTemplate extends React.Component {
         .user(`${this.userId}/${this.props.shelfUrl}/${bookItem.key}`)
         .remove();
       //REMOVE ITEM FROM STATE
-      this.state.bookShelf.splice(index, 1);
-      this.setState({ bookShelf: this.state.bookShelf });
+      this.setState({lightFire:true})
+      setTimeout(()=> {
+        this.state.bookShelf.splice(index, 1);
+      this.setState({ bookShelf: this.state.bookShelf});
+      this.setState({lightFire:false})
+      }, 2000)
+      
     }
   }
 
@@ -73,6 +79,7 @@ class ShelfTemplate extends React.Component {
           //REMOVE ITEM FROM STATE
           this.state.bookShelf.splice(index, 1);
           this.setState({ bookShelf: this.state.bookShelf });
+          alert('Book added to Books Read List!')
         });
     }
   }
@@ -97,7 +104,10 @@ class ShelfTemplate extends React.Component {
                       alt={book.book.title}
                       src={book.book.imageUrl}
                     ></img>
+                    {this.state.lightFire ? <FireGif />: null}
+                    
                   </Link>
+                  <div className={BookStyles.buttons}>
                   <button
                     onClick={this.handleRemoveBooks.bind(this, index)}
                     className={ButtonStyles.removeBook}
@@ -119,8 +129,10 @@ class ShelfTemplate extends React.Component {
                       className={ButtonStyles.removeBook}
                     >
                       Finished?
+                      
                     </button>
                   ) : null}
+                  </div>
                 </div>
               );
             })

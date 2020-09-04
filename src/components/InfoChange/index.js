@@ -42,6 +42,7 @@ class InfoChangeForm extends Component {
     }
     return (
       <form onSubmit={this.onSubmit} className={FormStyles.container}>
+      <p>Change name?</p>
         <input
           name="displayName"
           value={displayName}
