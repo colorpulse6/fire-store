@@ -45,86 +45,109 @@ class ShelfTemplate extends React.Component {
       });
   }
 
-  handleRemoveBooks(index) {
+  setConfirmWindow(
+    index,
+    cbFunction,
+    title,
+    text,
+    confirmButtonText,
+    action,
+    actionMessage,
+    safeMessage
+  ) {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: ButtonStyles.removeBook,
         cancelButton: ButtonStyles.buttonPrimary,
       },
       buttonsStyling: false,
-      
     });
-    
-      swalWithBootstrapButtons
-        .fire({
-          
-          title: "Are you sure?",
-          text: "You won't be able to revert this!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonText: "Yes, delete it!",
-          cancelButtonText: "No, cancel!",
-          reverseButtons: true,
-         
-          
-        })
-        .then((result) => {
-          if (result.value) {
-            swalWithBootstrapButtons.fire(
-              "Deleted!",
-              "Your file has been deleted.",
-              "success"
-            );
-            let bookItem = this.state.bookShelf[index];
-      //REMOVE ITEM FROM DB
 
-      this.props.firebase
-        .user(`${this.userId}/${this.props.shelfUrl}/${bookItem.key}`)
-        .remove();
-      //REMOVE ITEM FROM STATE
-      this.setState({ lightFire: true });
-      setTimeout(() => {
-        this.state.bookShelf.splice(index, 1);
-        this.setState({ bookShelf: this.state.bookShelf });
-        this.setState({ lightFire: false });
-      }, 2000);
-          } else if (
-            /* Read more about handling dismissals below */
-            result.dismiss === Swal.DismissReason.cancel
-          ) {
-            swalWithBootstrapButtons.fire(
-              "Cancelled",
-              "Your file is safe :)",
-              "error"
-            );
-          }
-        })
-     
-      
-    
+    swalWithBootstrapButtons
+      .fire({
+        title,
+        text,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText,
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true,
+      })
+      .then((result) => {
+        if (result.value) {
+          swalWithBootstrapButtons.fire(action, actionMessage, "success");
+          cbFunction(index);
+          this.setState({ lightFire: false });
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithBootstrapButtons.fire(
+            "Cancelled",
+            safeMessage,
+            "error"
+          );
+        }
+      });
   }
 
+  deleteFromDb(index) {
+    let bookItem = this.state.bookShelf[index];
+    //REMOVE ITEM FROM DB
+
+    this.props.firebase
+      .user(`${this.userId}/${this.props.shelfUrl}/${bookItem.key}`)
+      .remove();
+    //REMOVE ITEM FROM STATE
+    this.setState({ lightFire: true });
+
+    this.state.bookShelf.splice(index, 1);
+    this.setState({ bookShelf: this.state.bookShelf });
+  }
+
+  handleRemoveBooks(index) {
+    this.setConfirmWindow(
+      index,
+      this.deleteFromDb.bind(this, index),
+      "Are you sure you want to remove this book?",
+      "You won't be able to revert this!",
+      "Yes, delete it!",
+      "Deleted!",
+      "Book has been deleted.",
+      "Your book is safe :)"
+    );
+  }
+
+  moveToReadingList(index, id, title, authors, imageUrl) {
+    let bookItem = this.state.bookShelf[index];
+    this.props.firebase
+      .user(`${this.userId}/booksRead`)
+      .push({
+        id: id,
+        title: title,
+        authors: authors,
+        imageUrl: imageUrl,
+      })
+      .then(() => {
+        this.props.firebase
+          .user(`${this.userId}/${this.props.shelfUrl}/${bookItem.key}`)
+          .remove();
+        //REMOVE ITEM FROM STATE
+        this.state.bookShelf.splice(index, 1);
+        this.setState({ bookShelf: this.state.bookShelf });
+      });
+  }
   handleAddBookToRead(index, id, title, authors, imageUrl) {
-    if (window.confirm("Are you sure you have finished reading this book?")) {
-      let bookItem = this.state.bookShelf[index];
-      this.props.firebase
-        .user(`${this.userId}/booksRead`)
-        .push({
-          id: id,
-          title: title,
-          authors: authors,
-          imageUrl: imageUrl,
-        })
-        .then(() => {
-          this.props.firebase
-            .user(`${this.userId}/${this.props.shelfUrl}/${bookItem.key}`)
-            .remove();
-          //REMOVE ITEM FROM STATE
-          this.state.bookShelf.splice(index, 1);
-          this.setState({ bookShelf: this.state.bookShelf });
-          alert("Book added to Books Read List!");
-        });
-    }
+    this.setConfirmWindow(
+      index,
+      this.moveToReadingList.bind(this, index, id, title, authors, imageUrl),
+      "Are you sure you finished this book?",
+      "You can always move it back!",
+      "Yes, move it!",
+      "Book Moved!",
+      "Book has been moved to Reading List.",
+      "Your book has not been moved :)"
+    );
   }
 
   render() {
