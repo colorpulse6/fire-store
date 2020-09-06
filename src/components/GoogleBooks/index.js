@@ -3,13 +3,15 @@ import BookStyles from "./books.module.scss";
 import Input from "../input";
 import { Link } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
-import LoadingGif from '../LoadingGif'
-
+import LoadingGif from "../LoadingGif";
+import LocalStorage from '../LocalStorage';
 class SearchBooks extends React.Component {
   state = {
     filteredBooks: [],
     loading: true,
-    input: JSON.parse(sessionStorage.getItem("input")) || "",
+    input: JSON.parse(localStorage.getItem("input")) || "",
+    existingEntries: JSON.parse(localStorage.getItem("allEntries")) || [],
+
   };
   componentDidMount() {
     this.getBooks(this.state.input);
@@ -21,10 +23,8 @@ class SearchBooks extends React.Component {
 
     //Handle no input
     var input = e.target.value || this.state.input;
-    
-      this.getBooks(input);
-  
-    
+
+    this.getBooks(input);
   };
 
   getBooks = (input) => {
@@ -51,13 +51,14 @@ class SearchBooks extends React.Component {
 
   setSearchTerm = (input) => {
     this.setState({ input: input }, () => {
-      sessionStorage.setItem("input", JSON.stringify(this.state.input));
+      localStorage.setItem("input", JSON.stringify(this.state.input));
+      
     });
   };
 
   render() {
     if (this.state.loading) {
-      return <LoadingGif/>
+      return <LoadingGif />;
     }
     return (
       <div>
@@ -65,26 +66,29 @@ class SearchBooks extends React.Component {
           onChange={this.handleFilter}
           placeholder={"Search Books..."}
         ></Input>
-<div className={BookStyles.container}>
-        {this.state.filteredBooks ? (
-          this.state.filteredBooks.map((book, index) => {
-            return (
-              <Link to={`${ROUTES.BOOK_DETAILS}/${book.id}`}>
-              
-                <img
-                  alt={book.volumeInfo.title}
-                  className={BookStyles.books}
-                  key={index}
-                  src={
-                    book.volumeInfo.imageLinks &&
-                    book.volumeInfo.imageLinks.smallThumbnail
-                  }
-                ></img>
-               
-              </Link>
-            );
-          })
-        ) : null}
+        <LocalStorage
+          input={this.state.input}
+        />
+        <p>Last Search: {this.state.input}</p>
+        
+        <div className={BookStyles.container}>
+          {this.state.filteredBooks
+            ? this.state.filteredBooks.map((book, index) => {
+                return (
+                  <Link to={`${ROUTES.BOOK_DETAILS}/${book.id}`}>
+                    <img
+                      alt={book.volumeInfo.title}
+                      className={BookStyles.books}
+                      key={index}
+                      src={
+                        book.volumeInfo.imageLinks &&
+                        book.volumeInfo.imageLinks.smallThumbnail
+                      }
+                    ></img>
+                  </Link>
+                );
+              })
+            : null}
         </div>
       </div>
     );

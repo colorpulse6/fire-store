@@ -4,12 +4,13 @@ import { withAuthorization } from "../Session";
 import BookStyles from "../GoogleBooks/books.module.scss";
 import ButtonStyles from "../../constants/buttons.module.scss";
 import * as ROUTES from "../../constants/routes";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 
 import LoadingGif from "../LoadingGif";
 import FireGif from "../FireGif";
 
-import Swal from "sweetalert2";
-
+import {confirmWindowShelf} from './confirmWindow'
 class ShelfTemplate extends React.Component {
   userId = this.props.firebase.auth.currentUser.uid;
 
@@ -22,6 +23,7 @@ class ShelfTemplate extends React.Component {
 
   componentDidMount() {
     this.handleGetBooksRead();
+    console.log(this.props.location.state);
   }
 
   handleGetBooksRead() {
@@ -45,51 +47,7 @@ class ShelfTemplate extends React.Component {
       });
   }
 
-  setConfirmWindow(
-    index,
-    cbFunction,
-    title,
-    text,
-    confirmButtonText,
-    action,
-    actionMessage,
-    safeMessage
-  ) {
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        confirmButton: ButtonStyles.removeBook,
-        cancelButton: ButtonStyles.buttonPrimary,
-      },
-      buttonsStyling: false,
-    });
-
-    swalWithBootstrapButtons
-      .fire({
-        title,
-        text,
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText,
-        cancelButtonText: "No, cancel!",
-        reverseButtons: true,
-      })
-      .then((result) => {
-        if (result.value) {
-          swalWithBootstrapButtons.fire(action, actionMessage, "success");
-          cbFunction(index);
-          this.setState({ lightFire: false });
-        } else if (
-          /* Read more about handling dismissals below */
-          result.dismiss === Swal.DismissReason.cancel
-        ) {
-          swalWithBootstrapButtons.fire(
-            "Cancelled",
-            safeMessage,
-            "error"
-          );
-        }
-      });
-  }
+  
 
   deleteFromDb(index) {
     let bookItem = this.state.bookShelf[index];
@@ -99,14 +57,14 @@ class ShelfTemplate extends React.Component {
       .user(`${this.userId}/${this.props.shelfUrl}/${bookItem.key}`)
       .remove();
     //REMOVE ITEM FROM STATE
-    this.setState({ lightFire: true });
+    // this.setState({ lightFire: true });
 
     this.state.bookShelf.splice(index, 1);
     this.setState({ bookShelf: this.state.bookShelf });
   }
 
   handleRemoveBooks(index) {
-    this.setConfirmWindow(
+    confirmWindowShelf(
       index,
       this.deleteFromDb.bind(this, index),
       "Are you sure you want to remove this book?",
@@ -138,7 +96,7 @@ class ShelfTemplate extends React.Component {
       });
   }
   handleAddBookToRead(index, id, title, authors, imageUrl) {
-    this.setConfirmWindow(
+    confirmWindowShelf(
       index,
       this.moveToReadingList.bind(this, index, id, title, authors, imageUrl),
       "Are you sure you finished this book?",
@@ -151,6 +109,10 @@ class ShelfTemplate extends React.Component {
   }
 
   render() {
+    if (this.props.location.state){
+      var {bookId, bookTitle } = this.props.location.state
+    }
+    
     if (this.state.loading) {
       return <LoadingGif />;
     }
@@ -206,6 +168,18 @@ class ShelfTemplate extends React.Component {
             </p>
           )}
         </div>
+        {bookId ? <div>
+          <Link to={`/book-details/${bookId}`}>
+          <FontAwesomeIcon
+            icon={faAngleLeft}
+            alt="angle down"
+            style={{ marginLeft: "10px", width: "20px" }}
+          />
+
+          <p>Back to {bookTitle}</p>
+          </Link>
+        </div> : null}
+        
       </div>
     );
   }

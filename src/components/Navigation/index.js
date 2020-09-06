@@ -56,10 +56,11 @@ const NavigationAuth = () => {
                   icon={faAngleDown}
                   alt="angle down"
                   style={{ marginLeft: "10px", width: "8px" }}
-                ></FontAwesomeIcon>
+                />
               </span>
             </li>
           </div>
+          
           <div class="dropdown-menu" id="dropdown-menu2" role="menu">
             <div class="dropdown-content">
               <div class="dropdown-item">

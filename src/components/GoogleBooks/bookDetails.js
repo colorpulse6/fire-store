@@ -5,6 +5,11 @@ import { AuthUserContext } from "../Session";
 import ButtonStyles from "../../constants/buttons.module.scss";
 import BookStyles from "./books.module.scss";
 import LoadingGif from "../LoadingGif";
+import Swal from "sweetalert2";
+import {
+  confirmWindowDetails,
+  swalWithBootstrapButtons,
+} from "../YourShelf/confirmWindow";
 class BookDetails extends React.Component {
   bookId = this.props.match.params.bookId;
   userId = this.props.firebase.auth.currentUser.uid;
@@ -116,15 +121,19 @@ class BookDetails extends React.Component {
     //ADD BOOK TO DB READ
     //CHANGE THIS CONDITIONAL
     if (this.state.isInReadingList) {
-      alert("This book is already in your reading list!");
-    }
-    if (this.state.sameTitle && !this.state.isInReadingList) {
-      var confirm = window.confirm(
-        "You have a book in your shelf that is similar to this title, are you sure you want to add it?"
+      Swal.fire(
+        "This book is already in your reading list!",
+        "If you have finished it, move it to Books Read from your reading list",
+        "info"
       );
-      if (!this.state.isAlreadyRead && confirm && !this.state.isInReadingList) {
-        this.addToDb("booksRead", id, title, authors, imageLinks);
-      }
+    }
+
+    if (this.state.sameTitle && !this.state.isInReadingList) {
+      confirmWindowDetails(
+        this.addToDb.bind(this, "booksRead", id, title, authors, imageLinks),
+        "You have a book in your shelf that is similar to this title, are you sure you want to add it?",
+        "Book has been added to Books Read"
+      );
     }
     if (!this.state.sameTitle && !this.state.isInReadingList) {
       if (!this.state.isAlreadyRead) {
@@ -137,15 +146,15 @@ class BookDetails extends React.Component {
     //ADD BOOK TO DB LIST
     //CHANGE THIS CONDITIONAL
 
-    if (this.state.isAlreadyRead) {
-      var confirm = window.confirm(
-        "Looks like you have already read this book, are you sure you want to add it to your list?"
+    if (this.state.isAlreadyRead || this.state.sameTitle) {
+      confirmWindowDetails(
+        this.addToDb.bind(this, "readingList", id, title, authors, imageLinks),
+        "Looks like you have already read this book, are you sure you want to add it to your list?",
+        "Book has been added to Books Read"
       );
     }
-    if (confirm && !this.state.isInReadingList) {
-      this.addToDb("readingList", id, title, authors, imageLinks);
-    }
-    if (!this.state.isInReadingList) {
+
+    if (!this.state.isInReadingList && !this.state.sameTitle) {
       this.addToDb("readingList", id, title, authors, imageLinks);
     }
   }
@@ -201,7 +210,12 @@ class BookDetails extends React.Component {
               )}
 
               {this.state.isAlreadyRead ? (
-                <Link to="/your-shelf/books-read">
+                <Link
+                  to={{
+                    pathname: "/your-shelf/books-read",
+                    state: { bookTitle: title, bookId: id },
+                  }}
+                >
                   <p>Book in Shelf!</p>
                 </Link>
               ) : (
@@ -216,7 +230,12 @@ class BookDetails extends React.Component {
                 </button>
               )}
               {this.state.isInReadingList ? (
-                <Link to="/your-shelf/to-read">
+                <Link
+                  to={{
+                    pathname: "/your-shelf/to-read",
+                    state: { bookTitle: title, bookId: id },
+                  }}
+                >
                   <p>Book in Reading List!</p>
                 </Link>
               ) : (

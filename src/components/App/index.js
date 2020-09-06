@@ -13,11 +13,14 @@ import ShelfTemplate from "../YourShelf";
 import ToReadList from "../YourShelf/toReadList";
 import BooksReadList from "../YourShelf/booksReadList";
 import * as ROUTES from "../../constants/routes";
+import "bulma/css/bulma.css";
+
 
 import { withAuthentication } from "../Session";
 
 const App = () => (
   <Router>
+  
     <div>
       <Navigation />
       <hr />
