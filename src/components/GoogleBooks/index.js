@@ -57,7 +57,8 @@ class SearchBooks extends React.Component {
 
   handleSaveSearch = () => {
     let allEntries = JSON.parse(localStorage.getItem("allEntries"));
-    if (!allEntries.includes(this.state.input)) {
+    
+    if (allEntries === null || !allEntries.includes(this.state.input)) {
       this.setState(
         {
           existingEntries: [...this.state.existingEntries, this.state.input],
