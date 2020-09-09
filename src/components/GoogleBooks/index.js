@@ -4,19 +4,19 @@ import Input from "../input";
 import { Link } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
 import LoadingGif from "../LoadingGif";
-import LocalStorage from "../LocalStorage";
+import SearchStorage from "../../SearchStorage/storageFunctions";
 class SearchBooks extends React.Component {
   state = {
     filteredBooks: [],
     loading: true,
-    input: JSON.parse(localStorage.getItem("input")) || "",
-    existingEntries: JSON.parse(localStorage.getItem("allEntries")) || [],
-    saved: false,
-    savedEntry: "",
+    input: "",
+    
   };
+
   componentDidMount() {
     this.getBooks(this.state.input);
   }
+
 
   handleFilter = (e) => {
     e.preventDefault();
@@ -44,43 +44,6 @@ class SearchBooks extends React.Component {
           loading: false,
         });
       });
-    this.setSearchTerm(input);
-  };
-
-  //LOCAL STORAGE OF SEARCH TERM
-
-  setSearchTerm = (input) => {
-    this.setState({ input: input }, () => {
-      localStorage.setItem("input", JSON.stringify(this.state.input));
-    });
-  };
-
-  handleSaveSearch = () => {
-    let allEntries = JSON.parse(localStorage.getItem("allEntries"));
-    
-    if (allEntries === null || !allEntries.includes(this.state.input)) {
-      this.setState(
-        {
-          existingEntries: [...this.state.existingEntries, this.state.input],
-          saved: true,
-          savedEntry:"Search Books..."
-        },
-        () => {
-          localStorage.setItem(
-            "allEntries",
-            JSON.stringify(this.state.existingEntries)
-          );
-          setTimeout(() => {
-            this.setState({ saved: false });
-          }, 1000);
-        }
-      );
-    }
-  };
-
-  handleSavedSearchLink = (entry) => {
-    this.setState({ savedEntry: entry });
-    this.getBooks(entry);
   };
 
   render() {
@@ -91,17 +54,9 @@ class SearchBooks extends React.Component {
       <div>
         <Input
           onChange={this.handleFilter}
-          placeholder={this.state.savedEntry || "Search Books..."}
+          placeholder={"Search Books..."}
         ></Input>
-        <LocalStorage
-          input={this.state.input}
-          isActive={this.state.isActive}
-          existingEntries={this.state.existingEntries}
-          saved={this.state.saved}
-          setisActive={this.setisActive}
-          handleSaveSearch={this.handleSaveSearch}
-          handleSavedSearchLink={this.handleSavedSearchLink}
-        />
+        <SearchStorage input={this.state.input} getBooks={this.getBooks}/>
 
         <div className={BookStyles.container}>
           {this.state.filteredBooks

@@ -41,19 +41,27 @@ function LocalStorage(props) {
 
         <div class="dropdown-menu" id="dropdown-menu2" role="menu">
           <div class="dropdown-content">
-            {props.existingEntries.slice((props.existingEntries.length - 10), props.existingEntries.length).map((entry) => {
-              return (
-                <button
-                  onClick={() => {
-                    props.handleSavedSearchLink(entry);
-                    setisActive(!isActive);
-                  }}
-                  class="dropdown-item"
-                >
-                  {entry}
-                </button>
-              );
-            })}
+            {props.existingEntries
+              .slice(
+                props.existingEntries.length - 10,
+                props.existingEntries.length
+              )
+              .map((entry, index) => {
+                return (
+                  <div key={index}>
+                    <button
+                      onClick={() => {
+                        props.handleSavedSearchLink(entry);
+                        setisActive(!isActive);
+                      }}
+                      class="dropdown-item"
+                    >
+                      {entry}
+                    </button>
+                    <button onClick={() => {props.deleteSearchTerm(index)}}>x</button>
+                  </div>
+                );
+              })}
           </div>
         </div>
       </div>
@@ -62,8 +70,7 @@ function LocalStorage(props) {
 }
 
 const clickOutsideConfig = {
-  handleClickOutside: () => LocalStorage.handleClickOutside
+  handleClickOutside: () => LocalStorage.handleClickOutside,
 };
 
 export default onClickOutside(LocalStorage, clickOutsideConfig);
-

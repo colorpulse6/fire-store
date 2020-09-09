@@ -8,7 +8,7 @@ import LoadingGif from "../LoadingGif";
 import Swal from "sweetalert2";
 import {
   confirmWindowDetails,
-  swalWithBootstrapButtons,
+  
 } from "../YourShelf/confirmWindow";
 class BookDetails extends React.Component {
   bookId = this.props.match.params.bookId;
