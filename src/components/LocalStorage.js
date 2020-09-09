@@ -1,10 +1,12 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import ButtonStyles from "../constants/buttons.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
+import onClickOutside from "react-onclickoutside";
 
-export default function LocalStorage(props) {
-  const [isActive, setisActive] = React.useState(false);
+function LocalStorage(props) {
+  const [isActive, setisActive] = useState(false);
+  LocalStorage.handleClickOutside = () => setisActive(false);
 
   return (
     <div>
@@ -58,3 +60,10 @@ export default function LocalStorage(props) {
     </div>
   );
 }
+
+const clickOutsideConfig = {
+  handleClickOutside: () => LocalStorage.handleClickOutside
+};
+
+export default onClickOutside(LocalStorage, clickOutsideConfig);
+
