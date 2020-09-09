@@ -25,7 +25,7 @@ const NavigationAuth = () => {
     <div className={NavStyles.container}>
       <li
         onClick={() => {
-          setisActive(!isActive);
+          setisActive(false);
         }}
       >
         <Link to={ROUTES.LANDING}>

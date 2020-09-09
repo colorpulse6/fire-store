@@ -1,0 +1,28 @@
+.container {
+    display:flex;
+    justify-content: center;
+    margin-top:-20px;
+}
+
+.container button, p {
+margin-right:20px;
+}
+
+.content {
+    display:flex;
+}
+
+.content button {
+    border:none;
+    background-color: white;
+}
+
+.content button:hover {
+    background-color: white;
+
+}
+
+.content button button {
+    margin-left:50px;
+    padding-right:-20px;
+}

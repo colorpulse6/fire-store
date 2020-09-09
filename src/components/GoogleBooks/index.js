@@ -5,18 +5,18 @@ import { Link } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
 import LoadingGif from "../LoadingGif";
 import SearchStorage from "../../SearchStorage/storageFunctions";
+import { AuthUserContext } from "../Session";
+
 class SearchBooks extends React.Component {
   state = {
     filteredBooks: [],
     loading: true,
     input: "",
-    
   };
 
   componentDidMount() {
     this.getBooks(this.state.input);
   }
-
 
   handleFilter = (e) => {
     e.preventDefault();
@@ -56,7 +56,16 @@ class SearchBooks extends React.Component {
           onChange={this.handleFilter}
           placeholder={"Search Books..."}
         ></Input>
-        <SearchStorage input={this.state.input} getBooks={this.getBooks}/>
+        <AuthUserContext>
+          {(authUser) =>
+            authUser ? (
+              <SearchStorage
+                input={this.state.input}
+                getBooks={this.getBooks}
+              />
+            ) : null
+          }
+        </AuthUserContext>
 
         <div className={BookStyles.container}>
           {this.state.filteredBooks

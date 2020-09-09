@@ -11,6 +11,7 @@ export default class storageFunctions extends Component {
 
   componentDidMount(){
       this.setSearchTerm(this.props.input)
+      console.log(this.state.existingEntries.length)
   }
 
   setSearchTerm = (input) => {
