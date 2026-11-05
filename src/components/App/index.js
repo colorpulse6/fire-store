@@ -38,6 +38,7 @@ const App = () => (
       <Route exact path={`${ROUTES.YOUR_SHELF}`} component={ShelfTemplate} />
       <Route exact path={`${ROUTES.TO_READ_LIST}`} component={ToReadList} />
       <Route exact path={`${ROUTES.BOOKS_READ}`} component={BooksReadList} />
+      <footer style={{ padding: '1rem', textAlign: 'center' }}><a href='/copyright.html'>© 2026 Nichalas Barnes · Copyright and licensing</a></footer>
     </div>
   </Router>
 );
